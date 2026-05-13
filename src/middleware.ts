@@ -5,9 +5,7 @@ const secret = new TextEncoder().encode(process.env.AUTH_SECRET ?? "");
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("session")?.value;
-  if (!token) {
-    return redirectToLogin(req);
-  }
+  if (!token) return redirectToLogin(req);
   try {
     await jwtVerify(token, secret, { algorithms: ["HS256"] });
     return NextResponse.next();
@@ -23,5 +21,5 @@ function redirectToLogin(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/((?!login).*)"],
+  matcher: ["/admin", "/admin/((?!login).*)"],
 };
