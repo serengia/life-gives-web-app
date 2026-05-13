@@ -1,167 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import SiteHeader from "@/components/SiteHeader";
+import { NAV_LINKS } from "@/lib/constants";
 
 const linkFocus =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy";
 
-const mobileNavLink =
-  `flex min-h-11 items-center px-4 py-3 text-base font-medium text-white/95 transition-colors hover:bg-white/5 hover:text-white ${linkFocus}`;
-
 export default function HeroSection() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 768px)");
-    const onChange = () => {
-      if (mql.matches) setMobileMenuOpen(false);
-    };
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
-  useEffect(() => {
-    if (!mobileMenuOpen) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileMenuOpen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [mobileMenuOpen]);
-
-  // Always reserve border width so sticking the bar doesn't cause a 1px layout shift when it becomes visible
-  const navShell =
-    scrolled || mobileMenuOpen
-      ? "border-b border-white/10 bg-navy/95 backdrop-blur-sm"
-      : "border-b border-transparent bg-transparent";
-
   return (
     <section
       id="home"
       className="flex min-h-screen flex-col overflow-x-hidden bg-navy text-white"
     >
-      <header
-        className={`sticky top-0 z-50 w-full transition-colors duration-300 ${navShell}`}
-      >
-        <div className="relative">
-          <nav
-            aria-label="Primary"
-            className="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6"
-          >
-            <a
-              href="#home"
-              onClick={closeMobileMenu}
-              className={`relative z-10 min-w-0 text-sm font-bold tracking-wider text-gold md:text-base ${linkFocus} shrink-0 rounded-sm`}
-            >
-              JAMES SERENGIA
-            </a>
-
-            <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex">
-              <a
-                href="#author"
-                className={`text-sm text-white/90 transition-colors hover:text-white ${linkFocus} rounded-sm`}
-              >
-                About
-              </a>
-              <a
-                href="#inside"
-                className={`text-sm text-white/90 transition-colors hover:text-white ${linkFocus} rounded-sm`}
-              >
-                What&apos;s Inside
-              </a>
-              <a
-                href="#pricing"
-                className={`text-sm text-white/90 transition-colors hover:text-white ${linkFocus} rounded-sm`}
-              >
-                Pricing
-              </a>
-            </div>
-
-            <div className="relative z-10 flex items-center gap-2 sm:gap-3">
-              <a
-                href="#pricing"
-                className={`inline-flex rounded-lg bg-gold px-4 py-2 text-sm font-bold text-white shadow-md transition-colors hover:bg-amber-600 ${linkFocus}`}
-              >
-                Order Now
-              </a>
-              <button
-                type="button"
-                aria-expanded={mobileMenuOpen}
-                aria-controls="primary-mobile-panel"
-                aria-label={
-                  mobileMenuOpen
-                    ? "Close navigation menu"
-                    : "Open navigation menu"
-                }
-                className={`inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md text-white md:hidden ${linkFocus}`}
-                onClick={() => setMobileMenuOpen((o) => !o)}
-              >
-                {mobileMenuOpen ? (
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden
-                  >
-                    <path
-                      d="M18 6L6 18M6 6l12 12"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden
-                  >
-                    <path
-                      d="M4 7h16M4 12h16M4 17h16"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
-          </nav>
-
-          <div
-            id="primary-mobile-panel"
-            className={`absolute left-0 right-0 top-full border-b border-white/10 bg-navy/[0.98] shadow-lg md:hidden ${mobileMenuOpen ? "block" : "hidden"}`}
-          >
-            <div className="mx-auto flex max-w-6xl flex-col px-4 pb-3 pt-1 sm:px-6">
-              <a href="#author" className={mobileNavLink} onClick={closeMobileMenu}>
-                About
-              </a>
-              <a href="#inside" className={mobileNavLink} onClick={closeMobileMenu}>
-                What&apos;s Inside
-              </a>
-              <a href="#pricing" className={mobileNavLink} onClick={closeMobileMenu}>
-                Pricing
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
+      <SiteHeader links={NAV_LINKS} variant="transparent-over-hero" />
 
       <div className="flex flex-1 flex-col justify-center">
         <div className="mx-auto grid min-w-0 max-w-6xl flex-1 grid-cols-1 items-center gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-12 lg:grid-cols-2 lg:gap-12 lg:py-16">

@@ -69,7 +69,6 @@ export const NAV_LINKS = [
   { label: "The Book", href: "#home" },
   { label: "Why It Works", href: "#problem" },
   { label: "What's Inside", href: "#inside" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "About the Author", href: "#author" },
-  { label: "FAQ", href: "#faq" },
+  { label: "About", href: "#author" },
+  { label: "Blog", href: "/blog" },
 ] as const;

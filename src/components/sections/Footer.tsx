@@ -1,15 +1,7 @@
+import { NAV_LINKS } from "@/lib/constants";
+
 const linkFocus =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#080f1a] rounded-sm";
-
-const quickLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About the Book", href: "#book" },
-  { label: "What's Inside", href: "#inside" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "About the Author", href: "#author" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Order Now", href: "#order" },
-] as const;
 
 // TODO: Replace with real social profile URLs (Instagram, X, Facebook, YouTube)
 const socials = [
@@ -19,7 +11,11 @@ const socials = [
   { label: "YouTube", abbr: "[YT]", href: "#home" },
 ] as const;
 
-export default function Footer() {
+function applyPrefix(href: string, prefix: string) {
+  return href.startsWith("#") ? `${prefix}${href}` : href;
+}
+
+export default function Footer({ hrefPrefix = "" }: { hrefPrefix?: string }) {
   return (
     <footer className="bg-[#080f1a] py-12 text-white md:py-16 lg:py-20">
       <div className="mx-auto max-w-6xl px-6">
@@ -39,7 +35,7 @@ export default function Footer() {
               {socials.map(({ label, abbr, href }) => (
                 <a
                   key={label}
-                  href={href}
+                  href={applyPrefix(href, hrefPrefix)}
                   aria-label={`Follow on ${label}`}
                   className={`text-gray-400 transition-colors hover:text-gold ${linkFocus}`}
                 >
@@ -54,10 +50,10 @@ export default function Footer() {
               Quick Links
             </h3>
             <ul className="mt-4 flex flex-col gap-2.5 text-sm text-gray-300">
-              {quickLinks.map(({ label, href }) => (
+              {NAV_LINKS.map(({ label, href }) => (
                 <li key={href}>
                   <a
-                    href={href}
+                    href={applyPrefix(href, hrefPrefix)}
                     className={`transition-colors hover:text-gold ${linkFocus}`}
                   >
                     {label}
